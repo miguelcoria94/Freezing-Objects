@@ -46,3 +46,31 @@ Now you can be certain that you won't accidentally mutate the state within the r
 <h1 align="center">
 Understanding the difference between deep and shallow freezes
 </h1>
+
+example:
+
+```js
+const people = { farmers: { name: 'Old MacDonald' } };
+Object.freeze(people);
+```
+
+When you try to mutate an object that you froze by modifying a property, it will be prevented:
+
+```js
+people.farmers = { name: 'Young MacDonald' };
+people; // { farmers: { name: 'Old MacDonald' } }
+```
+
+Note: This is not a deep freeze. Object.freeze performs a shallow freeze as it only applies to the immediate properties of the object itself. Nested objects can still be mutated, so be careful. Here's an example of this:
+
+```js
+people.farmers.name = 'Young MacDonald';
+people; // { farmers: { name: 'Young MacDonald' } }
+```
+
+
+<h1 align="center">
+Object.freeze and arrays
+</h1>
+
+You can also use Object.freeze to freeze an array, so if a reducer's state parameter is an array, you can still prevent accidental state mutations:
