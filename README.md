@@ -74,3 +74,28 @@ Object.freeze and arrays
 </h1>
 
 You can also use Object.freeze to freeze an array, so if a reducer's state parameter is an array, you can still prevent accidental state mutations:
+
+```js
+const fruitReducer = (state = [], action) => {
+  Object.freeze(state);
+  switch (action.type) {
+    case ADD_FRUIT:
+      return [...state, action.fruit];
+    case ADD_FRUITS:
+      return [...state, ...action.fruits];
+    case SELL_FRUIT:
+      const index = state.indexOf(action.fruit);
+      if (index !== -1) {
+        // remove first instance of action.fruit
+        return [...state.slice(0, index), ...state.slice(index + 1)];
+      }
+      return state; // if action.fruit is not in state, return previous state
+    case SELL_OUT:
+      return [];
+    default:
+      return state;
+  }
+};
+```
+
+When an array is frozen with Object.freeze, its elements cannot be altered and no elements can be added to or removed from the array. Just like with objects, freezing arrays has limitations. If the array's elements containing objects, properties on those objects can still be mutated.
